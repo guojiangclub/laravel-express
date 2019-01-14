@@ -1,0 +1,47 @@
+{
+	"name": "ibrand/laravel-express",
+	"type": "library",
+	"description": "ibrand laravel express",
+	"keywords": [
+		"ibrand",
+		"laravel",
+		"express"
+	],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "tangqi",
+			"email": "tangqi@element.vip"
+		}
+	],
+	"require": {
+		"php": ">=7.0",
+		"guzzlehttp/guzzle": "~6.0"
+	},
+	"require-dev": {
+		"mockery/mockery": "~0.9",
+		"phpunit/phpunit": "~6.0",
+		"orchestra/testbench": "~3.5",
+		"orchestra/database": "~3.5"
+	},
+	"autoload": {
+		"psr-4": {
+			"iBrand\\Express\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"iBrand\\Express\\Test\\": "tests/"
+		}
+	},
+	"extra": {
+		"laravel": {
+			"providers": [
+				"iBrand\\Express\\ServiceProvider"
+			],
+			"aliases": {
+				"Express": "iBrand\\Express\\Facade"
+			}
+		}
+	}
+}
