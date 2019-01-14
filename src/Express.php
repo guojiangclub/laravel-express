@@ -97,7 +97,7 @@ class Express
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	public function getExpressNumber($number, $name)
+	protected function getExpressNumber($number, $name)
 	{
 		if (!isset($this->expressNumber[$name])) {
 			$this->expressNumber[$name] = $this->createHandle($name, $number, 'Number');
@@ -112,7 +112,7 @@ class Express
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	public function gateway($name)
+	protected function gateway($name)
 	{
 		if (!isset($this->gateways[$name])) {
 			$this->gateways[$name] = $this->createHandle($name);
@@ -129,7 +129,7 @@ class Express
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	public function createHandle($name, $params = '', $type = 'Gateway')
+	protected function createHandle($name, $params = '', $type = 'Gateway')
 	{
 		$className = $this->formatClassName($name);
 		$handle    = $type == 'Gateway' ? $this->makeHandle($className, config("ibrand.express.gateways.{$name}", [])) : $this->makeHandle($className, $params, $type);
@@ -153,7 +153,7 @@ class Express
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	public function makeHandle($class, $param, $type = 'Gateway')
+	protected function makeHandle($class, $param, $type = 'Gateway')
 	{
 		if (!class_exists($class)) {
 			throw new \Exception(sprintf($type . ' "%s" not exists.', $class));
