@@ -4,13 +4,10 @@ namespace iBrand\Express\Numbers;
 
 use GuzzleHttp\Client;
 use iBrand\Express\Contracts\StorageInterface;
-use iBrand\Express\Contracts\ExpressNumberInterface;
 use iBrand\Express\Storage\CacheStorage;
 
-class Kuaidi100Number implements ExpressNumberInterface
+class Kuaidi100Number extends BaseNumber
 {
-	protected $number;
-
 	protected $storage;
 
 	protected $key;
@@ -19,7 +16,7 @@ class Kuaidi100Number implements ExpressNumberInterface
 
 	public function __construct($number, $storage = null)
 	{
-		$this->number = $number;
+		parent::__construct($number);
 
 		$this->setKey($this->number);
 
@@ -53,11 +50,6 @@ class Kuaidi100Number implements ExpressNumberInterface
 		return null;
 	}
 
-	public function getNumber()
-	{
-		return $this->number;
-	}
-
 	public function setKey($number)
 	{
 		$key       = 'ibrand.express.number.' . $number;
@@ -67,6 +59,11 @@ class Kuaidi100Number implements ExpressNumberInterface
 	public function getKey()
 	{
 		return $this->key;
+	}
+
+	public function getStorage()
+	{
+		return $this->storage;
 	}
 
 	public function getAutoNumberUrl($number)

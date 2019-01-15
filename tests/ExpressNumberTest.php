@@ -2,6 +2,7 @@
 
 namespace iBrand\Express\Test;
 
+use iBrand\Express\Contracts\StorageInterface;
 use iBrand\Express\Numbers\Kuaidi100Number;
 
 class ExpressNumberTest extends BaseTest
@@ -11,6 +12,13 @@ class ExpressNumberTest extends BaseTest
 	{
 		$number        = '810597623758';
 		$expressNumber = new Kuaidi100Number($number);
+
+		$comCode = $expressNumber->getComCode();
+		$this->assertJson($comCode);
+
+		$storage = $expressNumber->getStorage();
+		$this->assertInstanceOf(StorageInterface::class, $storage);
+		$storage->forget($expressNumber->getKey());
 
 		$comCode = $expressNumber->getComCode();
 		$this->assertJson($comCode);

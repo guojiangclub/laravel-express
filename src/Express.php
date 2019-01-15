@@ -45,25 +45,21 @@ class Express
 		$results      = [];
 		$isSuccessful = false;
 		$gateways     = $this->formatGateways($gateways);
+
 		foreach ($gateways as $gateway => $config) {
 			try {
 				$express = $this->getExpressNumber($number, $gateway);
+				$result  = $this->gateway($gateway)->query($express, $config);
 
 				$results[$gateway] = [
 					'gateway' => $gateway,
 					'status'  => self::STATUS_SUCCESS,
-					'result'  => $this->gateway($gateway)->query($express, $config),
+					'result'  => $result,
 				];
 				$isSuccessful      = true;
 
 				break;
 			} catch (\Exception $e) {
-				$results[$gateway] = [
-					'gateway'   => $gateway,
-					'status'    => self::STATUS_FAILURE,
-					'exception' => $e->getMessage(),
-				];
-			} catch (\Throwable $e) {
 				$results[$gateway] = [
 					'gateway'   => $gateway,
 					'status'    => self::STATUS_FAILURE,
@@ -76,18 +72,42 @@ class Express
 			return false;
 		}
 
-		return $results;
+		$this->storage->set($this->key, json_encode($results));
+
+		return json_encode($results);
 	}
 
+	/**
+	 * @param $key
+	 */
 	public function setKey($key)
 	{
 		$key       = 'ibrand.express.query' . $key;
 		$this->key = md5($key);
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getKey()
 	{
 		return $this->key;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getStorage()
+	{
+		return $this->storage;
+	}
+
+	/**
+	 * @param \iBrand\Express\Contracts\StorageInterface $storage
+	 */
+	public function setStorage(StorageInterface $storage)
+	{
+		$this->storage = $storage;
 	}
 
 	/**
@@ -131,14 +151,14 @@ class Express
 	 */
 	protected function createHandle($name, $params = '', $type = 'Gateway')
 	{
-		$className = $this->formatClassName($name);
-		$handle    = $type == 'Gateway' ? $this->makeHandle($className, config("ibrand.express.gateways.{$name}", [])) : $this->makeHandle($className, $params, $type);
+		$className = $this->formatClassName($name, $type);
+		$handle    = $type == 'Gateway' ? $this->makeHandle($className, config("ibrand.express.gateways.{$name}", []), $type) : $this->makeHandle($className, $params, $type);
 
 		if ($type == 'Gateway' && !($handle instanceof GatewayInterface)) {
 			throw new \Exception(sprintf($type . ' "%s" not inherited from %s.', $name, GatewayInterface::class));
 		}
 
-		if ($type == 'Number' && !($type instanceof ExpressNumberInterface)) {
+		if ($type == 'Number' && !($handle instanceof ExpressNumberInterface)) {
 			throw new \Exception(sprintf($type . ' "%s" not inherited from %s.', $name, ExpressNumberInterface::class));
 		}
 

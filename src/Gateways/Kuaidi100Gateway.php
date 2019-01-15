@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use iBrand\Express\Contracts\ExpressNumberInterface;
 use iBrand\Express\Contracts\GatewayInterface;
 
-class Kuaidi100GateWay implements GatewayInterface
+class Kuaidi100Gateway implements GatewayInterface
 {
 	const QUERY_URL = 'https://poll.kuaidi100.com/poll/query.do';
 
@@ -24,11 +24,7 @@ class Kuaidi100GateWay implements GatewayInterface
 			throw new \Exception('无效的快递单号');
 		}
 
-		$comCode = json_decode($comCode, true);
-		if (empty($comCode) || !is_array($comCode)) {
-			throw new \Exception('无效的快递单号');
-		}
-
+		$comCode   = json_decode($comCode, true);
 		$result    = [];
 		$isSuccess = false;
 		foreach ($comCode as $item) {
@@ -45,7 +41,7 @@ class Kuaidi100GateWay implements GatewayInterface
 			$response = $client->post(self::QUERY_URL . '?' . $params);
 			$content  = $response->getBody()->getContents();
 			$result   = json_decode($content, true);
-			if (!empty($result) && isset($result['message']) && $result['message'] == 'ok' && isset($result['state']) && $result['state'] == 0) {
+			if (!empty($result) && isset($result['message']) && $result['message'] == 'ok' && isset($result['status']) && 200 == $result['status']) {
 				$isSuccess = true;
 				break;
 			}
@@ -55,7 +51,7 @@ class Kuaidi100GateWay implements GatewayInterface
 			throw new \Exception('快递信息查询失败');
 		}
 
-		return $result;
+		return $result['data'];
 	}
 
 	/**
