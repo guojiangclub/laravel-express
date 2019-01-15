@@ -72,9 +72,9 @@ class Express
 			return false;
 		}
 
-		$this->storage->set($this->key, json_encode($results));
+		$this->storage->set($this->key, $results);
 
-		return json_encode($results);
+		return $results;
 	}
 
 	/**

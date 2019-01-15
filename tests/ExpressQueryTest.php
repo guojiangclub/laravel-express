@@ -20,7 +20,7 @@ class ExpressQueryTest extends BaseTest
 	/** @test */
 	public function testStorage()
 	{
-		$cache = config('ibrand.express.storage', CacheStorage::class);;
+		$cache   = config('ibrand.express.storage', CacheStorage::class);
 		$storage = new $cache;
 		$this->assertInstanceOf(StorageInterface::class, $storage);
 		Express::setStorage($storage);
@@ -30,17 +30,19 @@ class ExpressQueryTest extends BaseTest
 	/** @test */
 	public function testQuery()
 	{
+		$default = config('ibrand.express.default.gateways', []);
+
 		$number = '810597623758';
 
 		$result = Express::query($number);
-		$this->assertJson($result);
+		$this->assertArrayHasKey($default[0], $result);
 
 		$storage = Express::getStorage();
 		$storage->forget(Express::getKey());
 
 		$result = Express::query($number);
 
-		$this->assertJson($result);
+		$this->assertArrayHasKey($default[0], $result);
 	}
 
 	/** @test */
@@ -57,7 +59,7 @@ class ExpressQueryTest extends BaseTest
 	{
 		$number = '810597623758';
 
-		$data = $this->get(config('ibrand.express.route.prefix') . '/query?no=' . $number);
-		$this->assertJson($data->getContent());
+		$response = $this->get(config('ibrand.express.route.prefix') . '/query?no=' . $number);
+		$this->assertJson($response->getContent());
 	}
 }

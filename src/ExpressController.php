@@ -11,6 +11,11 @@ class ExpressController extends Controller
 	{
 		$number = request('no');
 
-		return Express::query($number);
+		$result = Express::query($number);
+		if (!empty($result) && is_array($result)) {
+			return response()->json($result);
+		}
+
+		return response()->json(['success' => false, 'message' => '快递信息查询失败']);
 	}
 }
