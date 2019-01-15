@@ -34,6 +34,8 @@ iBrand\Express\ServiceProvider::class
 'Express'=> iBrand\Express\Facade::class
 ```
 
+如需自定义配置请执行 `php artisan vendor:publish --provider="iBrand\Express\ServiceProvider" --tag="config"`
+
 ## 使用
 
 实现了查询快递信息路由，支持`web`和`api`,可以自定义prefix：
