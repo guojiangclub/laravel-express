@@ -7,15 +7,13 @@ use iBrand\Express\Contracts\StorageInterface;
 
 class CacheStorage implements StorageInterface
 {
-	const LIFETIME = 180;
-
 	/**
 	 * @param $key
 	 * @param $value
 	 */
 	public function set($key, $value)
 	{
-		Cache::put($key, $value, self::LIFETIME);
+		Cache::put($key, $value, config('ibrand.express.lifetime', 180));
 	}
 
 	/**

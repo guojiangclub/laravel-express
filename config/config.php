@@ -21,5 +21,8 @@ return [
 		],
 	],
 
-	'storage' => iBrand\Express\Storage\CacheStorage::class,
+	'storage'  => iBrand\Express\Storage\CacheStorage::class,
+
+	//单位：分钟
+	'lifetime' => 180,
 ];
