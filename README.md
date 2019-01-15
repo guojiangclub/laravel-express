@@ -37,7 +37,7 @@ iBrand\Express\ServiceProvider::class
 如需自定义配置请执行:
 
 ```php
-php artisan vendor:publish --provider="iBrand\Express\ServiceProvider" --tag="config"
+php artisan vendor:publish --provider="iBrand\Express\ServiceProvider"
 ```
 
 ## 使用
